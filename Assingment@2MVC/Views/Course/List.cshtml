@@ -1,0 +1,49 @@
+﻿@model CoursesViewModel
+
+@{
+    ViewData["Title"] = "All Courses";
+}
+<h1>@ViewData["Title"]</h1>
+
+<div class="mb-3">
+    <a asp-controller="Course" asp-action="Add">Add a new Course</a>
+</div>
+
+@if (Model.courses?.Count > 0)
+{
+    <table class="table table-bordered tabletable-striped table-hover">
+        <caption>List of Courses</caption>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>CourseInscrtoctor</th>
+                <th>Start Date</th>
+                <th>Room Number</th>
+                <th># of Student</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var UpdatedCourse in Model.courses)
+            {
+                <tr>
+                    <td>@UpdatedCourse.CourseName</td>
+                    <td>@UpdatedCourse.CourseInstructor</td>
+                    <td>@UpdatedCourse.StartDate.ToString("MMM dd, yyyy")</td>
+                    <td>@UpdatedCourse.RoomNumber</td>
+                    <td>@UpdatedCourse.Students?.Count</td>
+                    <td>
+                        <a asp-asp-controller="Course" asp-action="Manage" asp-route-id="@UpdatedCourse.CourseId">Manage</a>
+                        <span class="mx-1">|</span>
+                        <a asp-asp-controller="Course" asp-action="Edit" asp-route-id="@UpdatedCourse.CourseId">Edit</a>
+                    </td>
+
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    // Bootstrap alert
+}

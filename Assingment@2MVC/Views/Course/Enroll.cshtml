@@ -1,0 +1,33 @@
+﻿@model EnrollViewModel
+
+@{
+    ViewData["Title"] = "Enroll as Student";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<div class="my-3">
+    <h6>You have been invited to enroll in the "@Model.Student?.Course?.CourseName" Course!</h6>
+    <p>Hey, @Model.Student?.Name, you have been invited to enroll in @Model.Student?.Course?.CourseName starting on @Model.Student?.Course?.StartDate.ToShortDateString() and the host is "@Model.Student?.Course?.CourseInstructor"</p>
+
+</div>
+
+<form method="post" asp-action="Enroll" asp-route-courseId="@Model.Student?.Course?.CourseId" asp-route-studentId="@Model.Student?.StudentId">
+
+    <div class="text-danger" asp-validation-summary="All"></div>
+
+    <label class="form-label mx-3" asp-for="Response">Do you wnat to enroll?</label>
+
+    <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" value="Yes" asp-for="Response" />
+        <label class="form-check-label" asp-for="Response">Yes</label>
+    </div>
+
+    <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" value="No" asp-for="Response" />
+        <label class="form-check-label" asp-for="Response">No</label>
+    </div>
+
+    <input type="submit" class="btn btn-primary" value="Submit Response" />
+
+</form>

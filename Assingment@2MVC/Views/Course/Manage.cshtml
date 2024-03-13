@@ -1,0 +1,98 @@
+﻿@model ManageCourseViewModel
+
+@{
+    ViewData["Title"] = "Manage an Course";
+}
+<h1>@ViewData["Title"]</h1>
+
+<div class="mb-3">
+    <a asp-asp-controller="Course" asp-action="List">All Course</a>
+    <span class="mx-1">|</span>
+    <a asp-asp-controller="Course" asp-action="Edit" asp-route-id="">Edit this Course</a>
+    <span class="mx-1">|</span>
+    <a asp-asp-controller="Course" asp-action="Add">Add a new Course</a>
+</div>
+
+<div>
+    <h6>Course Summary:</h6>
+    <p>The Course "@Model.Course?.CourseName" is in @Model.Course?.RoomNumber starting on @Model.Course?.StartDate.ToShortDateString() and the Course Insctructor is "@Model.Course?.CourseInstructor". </p>
+</div>
+
+@if (TempData.ContainsKey("notify"))
+{
+    <div class="alert alert-@TempData["className"] alert-dismissible fade show" role="alert">
+        @TempData["notify"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+<div class="row g-3 align-items-center">
+    <div class="col-auto">Invite not sent: @Model.CountConfirmationMessageNotSent</div>
+    <div class="col-auto">Invite sent: @Model.CountConfirmationMessageSent</div>
+    <div class="col-auto">Confirmed count: @Model.CountEnrollmentConfirmed</div>
+    <div class="col-auto">Decined count: @Model.CountEnrollmentDeclined</div>
+
+</div>
+
+<div class="manageTable">
+
+    <h6>Students:</h6>
+    @if (@Model.Students?.Count > 0)
+    {
+
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <td>Name</td>
+                    <td>Email</td>
+                    <td>Enrollment Status</td>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var student in Model.Students)
+                {
+                    <tr>
+                        <td>@student.Name</td>
+                        <td><a href="mailto:@student.Email"> @student.Email </a></td>
+                        <td>@student.StudentStatus</td>
+
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <div class="alert alert-danger" role="alert">
+            No students are enroll in this course!
+        </div>
+    }
+
+</div>
+
+
+<form class="manageForm" method="post" asp-action="Manage">
+
+    <div class="mb-3">
+        <label class="form-label" asp-for="Student.Name">Name:</label>
+        <span class="form-text text-danger" asp-validation-for="Student.Name"></span>
+        <input type="text" class="form-control" asp-for="Student.Name" />
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label" asp-for="Student.Email">Email:</label>
+        <span class="form-text text-danger" asp-validation-for="Student.Email"></span>
+        <input type="text" class="form-control" asp-for="Student.Email" />
+    </div>
+
+    <input type="submit" class="btn btn-primary" value="Create student" />
+
+</form>
+
+<div class="manageAction">
+    <h6>Action:</h6>
+    <form method="post" asp-action="SendEmail" asp-route-courseId="@Model?.Course?.CourseId">
+        <input class="btn btn-primary" type="submit" value="Sent Confirmation Requests" />
+    </form>
+
+</div>
